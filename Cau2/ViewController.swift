@@ -26,23 +26,22 @@ class ViewController: UIViewController {
     }
 
     @IBAction func buttonLoad(_ sender: Any) {
-        
-        if txtUrl1.text != "" {
-            loadImage1(url1: txtUrl1.text!, url2: txtUrl2.text!)
+        if txtUrl1.text == "" || txtUrl2.text == "" {
+            let alertController = UIAlertController(title: "Error", message: "Please enter URL", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            alertController.addAction(action)
+            
+            self.present(alertController, animated: true, completion: nil)
+        } else {
+            LoadImage(url1: txtUrl1.text!, url2: txtUrl2.text!)
         }
-        
-        if txtUrl2.text != "" {
-            loadImage1(url1: txtUrl1.text!, url2: txtUrl2.text!)
-        }
-
-        
     }
     
-    func loadImage1(url1: String, url2: String) {
-        let url1: URL = URL(string: url1)!
-        let url2: URL = URL(string: url2)!
+    func LoadImage(url1: String, url2: String) {
+        let urlSes1 = URL(string: url1)
+        let urlSes2 = URL(string: url2)
         
-        (URLSession(configuration: .default)).dataTask(with: url1, completionHandler: { (data, respone, error) in
+        (URLSession(configuration: .default)).dataTask(with: urlSes1!, completionHandler: { (data, respone, error) in
             if let imageData = data {
                 DispatchQueue.main.async { () -> Void in
                     self.imageView1.image = UIImage(data: imageData)
@@ -56,8 +55,7 @@ class ViewController: UIViewController {
             }
         }).resume()
         
-        
-        (URLSession(configuration: .default)).dataTask(with: url2, completionHandler: { (data, respone, error) in
+        (URLSession(configuration: .default)).dataTask(with: urlSes2!, completionHandler: { (data, respone, error) in
             if let imageData = data {
                 DispatchQueue.main.async { () -> Void in
                     self.imageView2.image = UIImage(data: imageData)
@@ -71,7 +69,5 @@ class ViewController: UIViewController {
             }
         }).resume()
     }
-
     
 }
-
